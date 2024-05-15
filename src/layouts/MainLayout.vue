@@ -1,7 +1,7 @@
 <template>
   <div class="flex min-h-screen w-full flex-col bg-muted/40">
     <Sidebar />
-    <div class="flex flex-col sm:gap-4 sm:py-4 lg:pl-80">
+    <div class="flex flex-col flex-1 sm:gap-4 sm:py-4 lg:pl-80">
       <header
         class="flex h-14 items-center justify-between gap-4 px-4 lg:h-[60px] lg:px-6"
       >

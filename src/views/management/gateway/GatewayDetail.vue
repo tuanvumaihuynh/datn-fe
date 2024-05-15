@@ -151,31 +151,29 @@
         </div>
       </CardHeader>
       <CardContent class="pt-2">
-        <div className="grid gap-4">
-          <div className="grid grid-cols-2 gap-4">
+        <div class="grid gap-4">
+          <div class="grid grid-cols-2 gap-4">
             <div>
-              <span className="text-sm font-medium">Name</span>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <span class="text-sm font-medium">Name</span>
+              <p class="text-sm text-gray-500 dark:text-gray-400">
                 {{ gateway?.name }}
               </p>
             </div>
             <div>
-              <span className="text-sm font-medium">Connected node</span>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <span class="text-sm font-medium">Connected node</span>
+              <p class="text-sm text-gray-500 dark:text-gray-400">
                 {{ gateway?.node ?? "N/A" }}
               </p>
             </div>
             <div>
-              <span className="text-sm font-medium">Location</span>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <span class="text-sm font-medium">Location</span>
+              <p class="text-sm text-gray-500 dark:text-gray-400">
                 {{ location }}
               </p>
             </div>
             <div>
-              <span className="text-sm font-medium"
-                >Connected/Disconnected at</span
-              >
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <span class="text-sm font-medium">Connected/Disconnected at</span>
+              <p class="text-sm text-gray-500 dark:text-gray-400">
                 {{
                   (gateway?.connected
                     ? gateway?.connectedAt
@@ -185,8 +183,8 @@
             </div>
           </div>
           <div>
-            <span className="text-sm font-medium">Description</span>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <span class="text-sm font-medium">Description</span>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
               {{ gateway?.description }}
             </p>
           </div>

@@ -64,11 +64,6 @@
       </DialogFooter>
     </DialogContent>
   </Dialog>
-  <CheckConnectivityDialog
-    v-if="showCheckConnectivityDialog"
-    :show-dialog="showCheckConnectivityDialog"
-    :device-id="deviceId!"
-  />
 </template>
 
 <script setup lang="ts">
@@ -87,10 +82,9 @@ import Stepper from "@/components/Stepper.vue";
 import DetailsStep from "./DetailsStep.vue";
 import TagsStep from "./TagsStep.vue";
 import CredentialsStep from "./CredentialsStep.vue";
-import CheckConnectivityDialog from "../CheckConnectivityDialog/index.vue";
 
 import { ref, computed, watch } from "vue";
-
+import { useRouter } from "vue-router";
 import { createDevice } from "@/api/device";
 import { getTags } from "@/api/tag";
 import { TagWithSelected } from "@/types/tag";
@@ -107,6 +101,8 @@ const emits = defineEmits<{
   (event: "submitted"): void;
 }>();
 
+const router = useRouter();
+
 const tagList = ref<TagNameWithSelected[]>([]);
 
 const name = ref<string>("");
@@ -120,7 +116,6 @@ const password = ref<string>("");
 
 const selectedStep = ref<Step>("Details");
 const isSubmitting = ref<boolean>(false);
-const showCheckConnectivityDialog = ref<boolean>(false);
 const deviceId = ref<string>();
 
 const detailsStepRef = ref();
@@ -169,7 +164,7 @@ async function onSubmit() {
         },
       });
       deviceId.value = data.id;
-      showCheckConnectivityDialog.value = true;
+      router.push(`/devices/${deviceId.value}`);
       emits("submitted");
       showCreateDialog.value = false;
     } catch (error) {

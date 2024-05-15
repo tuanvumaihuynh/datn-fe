@@ -9,3 +9,9 @@ export interface Log {
   level: "INFO" | "WARNING" | "ERROR";
   message: string;
 }
+
+export interface Attribute {
+  key: string;
+  value: any;
+  lastUpdate: string;
+}

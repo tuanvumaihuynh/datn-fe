@@ -13,6 +13,10 @@ export function getDevices(params: {
   return http.get("/devices", { params: q });
 }
 
+export function getDevice(id: string) {
+  return http.get(`/devices/${id}`);
+}
+
 export function createDevice(data: {
   name: string;
   description?: string;
@@ -35,4 +39,12 @@ export function createDevice(data: {
 
 export function update_tags(id: string, tags: string[]) {
   return http.put(`/devices/${id}/tags`, { tag_names: tags });
+}
+
+export function getDeviceConnectivity(id: string) {
+  return http.get(`/devices/${id}/connectivity`);
+}
+
+export function isDeviceConnected(id: string) {
+  return http.get(`/devices/${id}/connected`);
 }

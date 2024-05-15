@@ -46,8 +46,7 @@ export const routes: RouteRecordRaw[] = [
       {
         path: ":id",
         name: "GatewayDetail",
-        component: () =>
-          import("@/views/management/gateway/GatewayDetail/index.vue"),
+        component: () => import("@/views/management/gateway/GatewayDetail.vue"),
       },
     ],
   },
@@ -60,11 +59,11 @@ export const routes: RouteRecordRaw[] = [
         name: "Devices",
         component: () => import("@/views/management/device/DeviceList.vue"),
       },
-      // {
-      //   path: ":id",
-      //   name: "DeviceDetail",
-      //   component: () => import("@/views/management/gateway/GatewayDetail.vue"),
-      // },
+      {
+        path: ":id",
+        name: "DeviceDetail",
+        component: () => import("@/views/management/device/DeviceDetail.vue"),
+      },
     ],
   },
   {

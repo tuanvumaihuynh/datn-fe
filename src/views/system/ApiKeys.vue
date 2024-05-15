@@ -1,5 +1,5 @@
 <template>
-  <Card>
+  <Card class="flex flex-col flex-1">
     <CardHeader class="flex flex-row justify-between px-7">
       <div>
         <CardTitle class="mb-1">API Keys</CardTitle>
@@ -14,61 +14,67 @@
       </div>
     </CardHeader>
     <CardContent>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead class="w-[100px]">Name</TableHead>
-            <TableHead>Prefix</TableHead>
-            <TableHead>Enabled</TableHead>
-            <TableHead>Token</TableHead>
-            <TableHead>Scopes</TableHead>
-            <TableHead></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <template v-if="apiKeys.length">
-            <TableRow v-for="(item, i) in apiKeys" :key="i">
-              <TableCell>{{ item.name }}</TableCell>
-              <TableCell>
-                <Badge variant="outline" class="text-muted-foreground">{{
-                  item.prefix
-                }}</Badge>
-              </TableCell>
-              <TableCell>
-                <Switch
-                  :id="item.id"
-                  :checked="item.enabled"
-                  @update:checked="toggleEnabled(item, $event)"
-                />
-              </TableCell>
-              <TableCell>********************</TableCell>
-              <TableCell class="flex flex-col">
-                <span
-                  v-for="(scope, i) in item.scopes.slice().sort()"
-                  :key="i"
-                  class="text-muted-foreground"
-                >
-                  {{ scope }}</span
-                >
-              </TableCell>
-              <TableCell>
-                <ApiKeyDropdown
-                  :api-key="item"
-                  @delete="onDelete"
-                  @edit="console.log"
-                />
-              </TableCell>
-            </TableRow>
-          </template>
-          <template v-else>
-            <TableRow>
-              <TableCell :colSpan="5" class="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          </template>
-        </TableBody>
-      </Table>
+      <ScrollArea class="w-full whitespace-nowrap">
+        <ScrollArea class="h-[64vh] w-full relative">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead class="w-[100px]">Name</TableHead>
+                <TableHead>Prefix</TableHead>
+                <TableHead>Enabled</TableHead>
+                <TableHead>Token</TableHead>
+                <TableHead>Scopes</TableHead>
+                <TableHead></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <template v-if="apiKeys.length">
+                <TableRow v-for="(item, i) in apiKeys" :key="i">
+                  <TableCell>{{ item.name }}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline" class="text-muted-foreground">{{
+                      item.prefix
+                    }}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Switch
+                      :id="item.id"
+                      :checked="item.enabled"
+                      @update:checked="toggleEnabled(item, $event)"
+                    />
+                  </TableCell>
+                  <TableCell>********************</TableCell>
+                  <TableCell class="flex flex-col">
+                    <span
+                      v-for="(scope, i) in item.scopes.slice().sort()"
+                      :key="i"
+                      class="text-muted-foreground"
+                    >
+                      {{ scope }}</span
+                    >
+                  </TableCell>
+                  <TableCell>
+                    <ApiKeyDropdown
+                      :api-key="item"
+                      @delete="onDelete"
+                      @edit="console.log"
+                    />
+                  </TableCell>
+                </TableRow>
+              </template>
+              <template v-else>
+                <TableRow>
+                  <TableCell :colSpan="5" class="h-24 text-center">
+                    No results.
+                  </TableCell>
+                </TableRow>
+              </template>
+            </TableBody>
+          </Table>
+          <ScrollBar orientation="vertical" />
+        </ScrollArea>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </CardContent>
   </Card>
 </template>
@@ -76,6 +82,7 @@
 <script setup lang="ts">
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Card,
   CardContent,

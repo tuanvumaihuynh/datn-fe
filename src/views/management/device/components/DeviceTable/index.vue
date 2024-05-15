@@ -1,11 +1,19 @@
 <template>
   <Table>
-    <TableHeader>
+    <TableHeader class="sticky top-0 bg-white z-50">
       <TableRow
         v-for="headerGroup in table.getHeaderGroups()"
         :key="headerGroup.id"
       >
-        <TableHead v-for="header in headerGroup.headers" :key="header.id">
+        <TableHead
+          v-for="(header, i) in headerGroup.headers"
+          :key="header.id"
+          :class="{
+            'w-[20vw]': i === 0,
+            'w-[10vw]': i === 1 || i === 2,
+            'w-[25vw]': i === 3,
+          }"
+        >
           <FlexRender
             v-if="!header.isPlaceholder"
             :render="header.column.columnDef.header"
@@ -14,23 +22,26 @@
         </TableHead>
       </TableRow>
     </TableHeader>
+
     <TableBody>
       <template v-if="isLoading">
-        <tr>
-          <td colspan="100%">
-            <div class="flex justify-center items-center h-full">
-              <LoaderCircle
-                class="w-12 h-12 animate-spin text-primary"
-                aria-label="Loading..."
-              />
-            </div>
-          </td>
-        </tr>
+        <TableRow class="relative">
+          <TableCell
+            :colSpan="columns.length"
+            class="absolute inset-64 flex justify-center items-center"
+          >
+            <LoaderCircle
+              class="w-12 h-12 animate-spin text-primary"
+              aria-label="Loading..."
+            />
+          </TableCell>
+        </TableRow>
       </template>
       <template v-else-if="table.getRowModel().rows?.length">
         <TableRow
           v-for="row in table.getRowModel().rows"
           :key="row.id"
+          @click="$router.push(`/devices/${(row.original as any).id}`)"
           :data-state="row.getIsSelected() ? 'selected' : undefined"
         >
           <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
@@ -71,11 +82,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { watch } from "vue";
+
 const props = defineProps<{
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   isLoading: boolean;
 }>();
+const pageSize = defineModel("pageSize", {
+  type: Number,
+  default: 10,
+});
 
 const table = useVueTable({
   get data() {
@@ -86,5 +103,9 @@ const table = useVueTable({
   },
   getCoreRowModel: getCoreRowModel(),
   getPaginationRowModel: getPaginationRowModel(),
+});
+
+watch(pageSize, (newPageSize) => {
+  table.setPageSize(newPageSize);
 });
 </script>

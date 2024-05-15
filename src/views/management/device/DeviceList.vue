@@ -1,5 +1,5 @@
 <template>
-  <Card class="flex flex-col">
+  <Card class="flex flex-col flex-1">
     <CardHeader class="flex flex-row justify-between px-7">
       <div>
         <CardTitle>Devices</CardTitle>
@@ -27,12 +27,18 @@
       </div>
     </CardHeader>
     <CardContent>
-      <DeviceTable
-        :is-loading="tableLoading"
-        :columns="columns"
-        :data="devices"
-        class="w-full overflow-x-auto h-[calc(100vh-300px)]"
-      />
+      <ScrollArea class="w-full whitespace-nowrap">
+        <ScrollArea class="h-[64vh] w-full relative">
+          <DeviceTable
+            :is-loading="tableLoading"
+            :columns="columns"
+            :data="devices"
+            v-model:page-size="pageSize"
+          />
+          <ScrollBar orientation="vertical" />
+        </ScrollArea>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </CardContent>
     <CardFooter class="flex flex-1 items-end gap-4 justify-end space-x-2 mr-4">
       <div class="text-sm text-muted-foreground flex items-center gap-1">
@@ -98,6 +104,7 @@
 <script setup lang="ts">
 import { RefreshCcw } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Card,
   CardContent,
@@ -116,11 +123,9 @@ import {
 } from "@/components/ui/select";
 import {
   Pagination,
-  PaginationEllipsis,
   PaginationFirst,
   PaginationLast,
   PaginationList,
-  PaginationListItem,
   PaginationNext,
   PaginationPrev,
 } from "@/components/ui/pagination";
@@ -128,11 +133,14 @@ import DialogCreateForm from "./components/DeviceCreateForm/index.vue";
 
 import { ref, computed, onMounted } from "vue";
 import { useOffsetPagination } from "@vueuse/core";
+import useDeviceType from "@/hooks/useDeviceType";
 
 import { getDevices } from "@/api/device";
 import { Device } from "@/types/device";
 import DeviceTable from "./components/DeviceTable/index.vue";
 import { columns } from "./components/DeviceTable/column";
+
+const { getDeviceType } = useDeviceType();
 
 const showCreateDialog = ref<boolean>(false);
 
@@ -166,7 +174,8 @@ async function fetchDevices({
       id: item.id,
       name: item.name,
       description: item.description,
-      isGateway: item.is_gateway,
+      type: getDeviceType(item),
+      connected: item.connected,
       tags: item.tags,
       createdAt: item.created_at,
     }));

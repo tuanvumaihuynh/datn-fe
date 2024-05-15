@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-1 bg-background shrink-0 items-center justify-center rounded-md border border-dashed"
+    class="flex flex-1 shrink-0 items-center justify-center rounded-md border border-dashed"
   >
     <div
       class="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center"
