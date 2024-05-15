@@ -1,6 +1,6 @@
 <template>
   <Card
-    v-if="isLoading"
+    v-if="device === undefined"
     class="flex flex-col flex-1 items-center justify-center"
   >
     <LoaderCircle
@@ -37,7 +37,7 @@
                     }}
                   </div>
                 </CardDescription>
-                <div class="pt-2 flex flex-row"></div>
+                <DeviceTagContainer v-model:device="device" />
               </div>
             </div>
             <div class="ml-auto flex items-center gap-1">
@@ -55,7 +55,7 @@
                     Copy device Id
                   </DropdownMenuItem>
                   <DropdownMenuItem>Edit</DropdownMenuItem>
-                  <DropdownMenuItem>Export</DropdownMenuItem>
+                  <DropdownMenuItem>Disable</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>Reboot</DropdownMenuItem>
                 </DropdownMenuContent>
@@ -125,6 +125,7 @@ import DeviceDetailsTab from "./components/DeviceDetailsTab.vue";
 import DeviceAttributesTab from "./components/DeviceAttributesTab.vue";
 import DeviceMetricTab from "./components/DeviceMetricTab.vue";
 import DeviceRelationTab from "./components/DeviceRelationTab.vue";
+import DeviceTagContainer from "./components/DeviceTagContainer.vue";
 
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
@@ -147,7 +148,6 @@ const { syncPolling } = useSyncPolling();
 const { copyToClipboard } = useClipboard();
 const { getDeviceType } = useDeviceType();
 
-const isLoading = ref(false);
 const device = ref<Device>();
 const deviceId = computed(() => route.params.id as string);
 
@@ -180,11 +180,9 @@ async function getDeviceState() {
 }
 
 onMounted(async () => {
-  isLoading.value = true;
   await fetchDevice();
   if (device.value) {
     syncPolling(getDeviceState, DEVICE_STATE_POLLING_INTERVAL);
   }
-  isLoading.value = false;
 });
 </script>
