@@ -6,7 +6,7 @@ const Layout = () => import("@/layouts/MainLayout.vue");
 export const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    redirect: "/dashboard",
+    redirect: "/devices",
     meta: {
       authRequired: true,
     },
