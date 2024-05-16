@@ -12,7 +12,10 @@
         This feature is currently under development and not fully functional.
       </p>
 
-      <Button size="sm" class="relative" @click="$router.push('/')"
+      <Button
+        size="sm"
+        class="relative"
+        @click="$router.push({ name: 'Devices' })"
         >Back to home</Button
       >
     </div>

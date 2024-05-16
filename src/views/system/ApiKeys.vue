@@ -151,7 +151,7 @@ async function fetchPermissions() {
 async function toggleEnabled(apiKey: ApiKey, enabled: boolean) {
   apiKey.enabled = enabled;
   try {
-    await updateApiKey({
+    const {} = await updateApiKey({
       ...apiKey,
     });
     toast({
@@ -160,24 +160,9 @@ async function toggleEnabled(apiKey: ApiKey, enabled: boolean) {
   } catch (error) {
     console.error(error);
     apiKey.enabled = !apiKey.enabled;
-
-    toast({
-      title: `${enabled ? "Enable" : "Disable"} failed`,
-      variant: "destructive",
-    });
   }
 }
 
-// async function onUpdate(apiKey: ApiKey) {
-//   try {
-//     await updateApiKey({
-//      ...apiKey,
-//     });
-//     await fetchApiKeys();
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
 async function onDelete({ id }: ApiKey) {
   try {
     await deleteApiKey(id);

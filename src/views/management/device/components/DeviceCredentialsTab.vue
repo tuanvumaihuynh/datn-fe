@@ -28,10 +28,6 @@
               </span>
             </div>
           </FormControl>
-          <FormDescription>
-            This is your public device id. It is used to identify your device on
-            the MQTT broker.
-          </FormDescription>
           <FormMessage />
         </FormItem>
       </FormField>

@@ -29,13 +29,12 @@
                     {{ item.createdAt }}
                   </TableCell>
 
-                  <!-- <TableCell>
-                <ApiKeyDropdown
-                  :api-key="item"
-                  @delete="onDelete"
-                  @edit="console.log"
-                />
-              </TableCell> -->
+                  <TableCell>
+                    <Trash2
+                      class="cursor-pointer hover:text-red-500 w-4 h-4"
+                      @click="onDelete(item.id)"
+                    />
+                  </TableCell>
                 </TableRow>
               </template>
               <template v-else>
@@ -56,6 +55,7 @@
 </template>
 
 <script setup lang="ts">
+import { Trash2 } from "lucide-vue-next";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Card,
@@ -74,10 +74,12 @@ import {
 } from "@/components/ui/table";
 
 import { ref, onMounted } from "vue";
+import { useToast } from "@/components/ui/toast/use-toast";
 import { useDateFormat } from "@vueuse/core";
-import { getTags } from "@/api/tag";
+import { getTags, deleteTag } from "@/api/tag";
 import { Tag } from "@/types/tag";
 
+const { toast } = useToast();
 const tagList = ref<Tag[]>([]);
 
 async function fetchTags() {
@@ -98,6 +100,21 @@ async function fetchTags() {
   }
 }
 
+async function onDelete(id: string) {
+  try {
+    await deleteTag(id);
+    await fetchTags();
+    toast({
+      title: "Tag deleted",
+      description: "Tag has been deleted successfully",
+    });
+  } catch (error) {
+    toast({
+      title: "Error",
+      description: "Failed to delete tag",
+    });
+  }
+}
 onMounted(async () => {
   await fetchTags();
 });
