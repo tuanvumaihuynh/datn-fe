@@ -96,7 +96,7 @@ const onSubmit = handleSubmit(async (values) => {
   try {
     const { data } = await login(values);
     userStore.setAccessToken(data.access_token);
-    router.push("/");
+    router.push("/devices");
   } catch (error) {
     console.error(error);
   } finally {
