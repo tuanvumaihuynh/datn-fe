@@ -19,7 +19,9 @@
               >
               </Package>
               <div class="grid gap-0.5">
-                <CardTitle class="group flex items-center gap-2 text-lg">
+                <CardTitle
+                  class="group flex items-center gap-2 text-lg font-semibold"
+                >
                   {{ device?.name }}
                   <Badge
                     class="cursor-default"
@@ -32,7 +34,7 @@
                   <div>
                     Created at:
                     {{
-                      useDateFormat(device?.createdAt, "HH:mm A MMM DD, YYYY")
+                      useDateFormat(device?.createdAt, "YYYY-MM-DD HH:mm:ss")
                         .value
                     }}
                   </div>
@@ -160,6 +162,7 @@ const tabClass = "flex flex-1 flex-col";
 const tabValue = ref<TabValue>("details");
 
 const route = useRoute();
+
 const { syncPolling } = useSyncPolling();
 const { copyToClipboard } = useClipboard();
 const { getDeviceType } = useDeviceType();

@@ -12,7 +12,7 @@
       <form @submit="onSubmit">
         <CardHeader>
           <CardTitle class="text-2xl">Sign in</CardTitle>
-          <CardDescription> to continue to Project Energy </CardDescription>
+          <CardDescription> to continue to ProjectEnergyAdmin </CardDescription>
         </CardHeader>
         <CardContent class="grid gap-4">
           <div class="grid gap-2">

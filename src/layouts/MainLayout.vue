@@ -1,14 +1,17 @@
 <template>
   <div class="flex min-h-screen w-full flex-col bg-muted/40">
     <Sidebar />
-    <div class="flex flex-col flex-1 sm:gap-4 sm:py-4 lg:pl-80">
+    <div class="flex flex-col flex-1 sm:gap-2 sm:py-2 lg:pl-80">
       <header
         class="flex h-14 items-center justify-between gap-4 px-4 lg:h-[60px] lg:px-6"
       >
         <SidebarMobile />
-        <a href="/" class="flex items-center gap-2 font-semibold lg:hidden">
-          <CodeXml color="" class="h-8 w-8" />
-          <span class="font-bold">Project Energy</span>
+        <a
+          href="/"
+          class="flex justify-start items-center gap-2 font-semibold lg:hidden"
+        >
+          <Logo class="h-8 w-12 object-contain" />
+          <span class="font-bold text-lg">ProjectEnergyAdmin</span>
         </a>
         <div class="relative flex-1 ml-auto grow-0">
           <Button variant="outline" size="icon" class="ml-auto h-8 w-8">
@@ -28,15 +31,14 @@
             <DropdownMenuSeparator />
             <DropdownMenuItem
               @click="() => $router.push({ name: 'OrganizationSettings' })"
-              >Users</DropdownMenuItem
             >
+              Users
+            </DropdownMenuItem>
             <DropdownMenuItem @click="toLogin()">Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </header>
-      <main
-        class="flex flex-1 flex-col gap-4 p-4 overflow-auto lg:gap-6 lg:p-6"
-      >
+      <main class="flex flex-1 flex-col gap-4 p-4 overflow-auto">
         <router-view />
       </main>
     </div>
@@ -44,7 +46,8 @@
 </template>
 
 <script setup lang="ts">
-import { Bell, CircleUser, CodeXml } from "lucide-vue-next";
+import Logo from "@/assets/logo.vue";
+import { Bell, CircleUser } from "lucide-vue-next";
 
 import { Button } from "@/components/ui/button";
 import {

@@ -1,26 +1,3 @@
-<script setup lang="ts">
-import { MoreHorizontal } from "lucide-vue-next";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-
-defineProps<{
-  device: {
-    id: string;
-  };
-}>();
-
-function copy(id: string) {
-  navigator.clipboard.writeText(id);
-}
-</script>
-
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger as-child>
@@ -31,12 +8,46 @@ function copy(id: string) {
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
       <DropdownMenuLabel>Actions</DropdownMenuLabel>
-      <DropdownMenuItem @click="copy(device.id)">
+      <DropdownMenuItem @click="copyToClipboard(device.id)">
         Copy device ID
       </DropdownMenuItem>
       <DropdownMenuSeparator />
-      <DropdownMenuItem>View detail</DropdownMenuItem>
-      <DropdownMenuItem>Disable</DropdownMenuItem>
+      <DropdownMenuItem @click="$router.push(`/devices/${device.id}`)">
+        View detail
+      </DropdownMenuItem>
+      <DropdownMenuItem @click="onDelete">Delete</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 </template>
+
+<script setup lang="ts">
+import { MoreHorizontal } from "lucide-vue-next";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import { useToast } from "@/components/ui/toast/use-toast";
+import useClipboard from "@/hooks/useClipboard";
+
+const { toast } = useToast();
+const { copyToClipboard } = useClipboard();
+
+defineProps<{
+  device: {
+    id: string;
+  };
+}>();
+
+function onDelete() {
+  toast({
+    title: "Admin permission required",
+    description: "You need permission to delete device",
+  });
+}
+</script>

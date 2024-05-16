@@ -27,7 +27,20 @@
               </TableRow>
             </TableHeader>
             <TableBody>
-              <template v-if="tagList.length">
+              <template v-if="isLoading">
+                <TableRow class="relative">
+                  <TableCell
+                    colSpan="4"
+                    class="absolute inset-64 flex justify-center items-center"
+                  >
+                    <LoaderCircle
+                      class="w-12 h-12 animate-spin text-primary"
+                      aria-label="Loading..."
+                    />
+                  </TableCell>
+                </TableRow>
+              </template>
+              <template v-else-if="tagList.length">
                 <TableRow v-for="(item, i) in tagList" :key="i">
                   <TableCell>{{ item.id }}</TableCell>
                   <TableCell>
@@ -38,10 +51,20 @@
                   </TableCell>
 
                   <TableCell>
-                    <Trash2
-                      class="cursor-pointer hover:text-red-500 w-4 h-4"
-                      @click="onDelete(item.id)"
-                    />
+                    <DropdownMenu>
+                      <DropdownMenuTrigger as-child>
+                        <Button variant="ghost" class="w-8 h-8 p-0">
+                          <span class="sr-only">Open menu</span>
+                          <MoreHorizontal class="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem @click="onDelete(item.id)">
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               </template>
@@ -63,8 +86,17 @@
 </template>
 
 <script setup lang="ts">
-import { Trash2 } from "lucide-vue-next";
+import { LoaderCircle, MoreHorizontal } from "lucide-vue-next";
+import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Card,
   CardContent,
@@ -90,6 +122,7 @@ import { Tag } from "@/types/tag";
 
 const { toast } = useToast();
 
+const isLoading = ref(false);
 const showCreateDialog = ref(false);
 const tagList = ref<Tag[]>([]);
 
@@ -127,6 +160,8 @@ async function onDelete(id: string) {
   }
 }
 onMounted(async () => {
+  isLoading.value = true;
   await fetchTags();
+  isLoading.value = false;
 });
 </script>
