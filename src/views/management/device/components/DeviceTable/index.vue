@@ -41,7 +41,6 @@
         <TableRow
           v-for="row in table.getRowModel().rows"
           :key="row.id"
-          @click="$router.push(`/devices/${(row.original as any).id}`)"
           :data-state="row.getIsSelected() ? 'selected' : undefined"
         >
           <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
