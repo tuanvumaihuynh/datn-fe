@@ -9,10 +9,12 @@
         <DialogCreateForm
           :show-create-dialog="showCreateDialog"
           @submitted="
-            fetchDevices({
-              currentPage: page,
-              currentPageSize: pageSize,
-            })
+            () => {
+              fetchDevices({
+                currentPage: page,
+                currentPageSize: pageSize,
+              });
+            }
           "
         />
         <Button
@@ -207,7 +209,7 @@ const {
   pageSize: pageSize,
   onPageChange: fetchDevices,
   onPageSizeChange: fetchDevices,
-  onPageCountChange: fetchDevices,
+  // onPageCountChange: fetchDevices,
 });
 
 onMounted(async () => {

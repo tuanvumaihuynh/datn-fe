@@ -11,6 +11,7 @@ export interface Device {
   name: string;
   description: string;
   type: DeviceType;
+  credentials?: DeviceCredentials;
   connected: boolean;
   tags: string[];
   createdAt: string;

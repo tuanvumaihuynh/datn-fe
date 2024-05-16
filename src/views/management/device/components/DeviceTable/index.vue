@@ -1,6 +1,6 @@
 <template>
   <Table>
-    <TableHeader class="sticky top-0 bg-white z-50">
+    <TableHeader class="sticky top-0 bg-background z-50">
       <TableRow
         v-for="headerGroup in table.getHeaderGroups()"
         :key="headerGroup.id"

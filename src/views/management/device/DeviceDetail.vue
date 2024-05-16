@@ -66,6 +66,9 @@
             <TabsTrigger value="details">Details</TabsTrigger>
             <TabsTrigger value="attributes">Attributes</TabsTrigger>
             <TabsTrigger value="metric">Latest metric</TabsTrigger>
+            <TabsTrigger v-if="device.type !== 'SubDevice'" value="credentials"
+              >Credentials</TabsTrigger
+            >
             <TabsTrigger value="relation">Relation</TabsTrigger>
           </TabsList>
         </div>
@@ -89,6 +92,13 @@
           :class="tabValue === 'metric' ? tabClass : 'hidden'"
         >
           <DeviceMetricTab />
+        </TabsContent>
+        <TabsContent
+          v-if="device.type !== 'SubDevice'"
+          value="credentials"
+          :class="tabValue === 'credentials' ? tabClass : 'hidden'"
+        >
+          <DeviceCredentialsTab :credentials="device.credentials!" />
         </TabsContent>
         <TabsContent
           value="relation"
@@ -121,11 +131,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import DeviceTagContainer from "./components/DeviceTagContainer.vue";
 import DeviceDetailsTab from "./components/DeviceDetailsTab.vue";
 import DeviceAttributesTab from "./components/DeviceAttributesTab.vue";
 import DeviceMetricTab from "./components/DeviceMetricTab.vue";
+import DeviceCredentialsTab from "./components/DeviceCredentialsTab.vue";
 import DeviceRelationTab from "./components/DeviceRelationTab.vue";
-import DeviceTagContainer from "./components/DeviceTagContainer.vue";
 
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
@@ -138,7 +149,12 @@ import { Device } from "@/types/device";
 
 const DEVICE_STATE_POLLING_INTERVAL = 2000;
 
-type TabValue = "details" | "attributes" | "metric" | "relation";
+type TabValue =
+  | "details"
+  | "attributes"
+  | "metric"
+  | "credentials"
+  | "relation";
 const tabClass = "flex flex-1 flex-col";
 
 const tabValue = ref<TabValue>("details");
@@ -159,6 +175,13 @@ async function fetchDevice() {
       name: data.name,
       description: data.description,
       type: getDeviceType(data),
+      credentials: data.credentials
+        ? {
+            clientId: data.credentials.client_id,
+            username: data.credentials.username,
+            password: data.credentials.password,
+          }
+        : undefined,
       connected: data.connected,
       tags: data.tags,
       createdAt: data.created_at,

@@ -1,5 +1,10 @@
 <template>
   <div class="pt-2 flex flex-row gap-1">
+    <span
+      v-if="device?.tags.length === 0"
+      class="text-gray-500 dark:text-gray-400"
+      >No tags found
+    </span>
     <Badge v-for="item in device?.tags" variant="outline" class="cursor-default"
       >{{ item }}
     </Badge>
