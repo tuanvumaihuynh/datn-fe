@@ -70,6 +70,7 @@ type CustomTag = Pick<TagWithSelected, "selected" | "name">;
 
 const device = defineModel<Device>("device", { required: true });
 
+let initialTags: CustomTag[] = [];
 const tagList = ref<CustomTag[]>([]);
 const seletedTagNames = computed(() =>
   tagList.value.filter((tag) => tag.selected).map((tag) => tag.name)
@@ -87,6 +88,7 @@ async function fetchTags() {
         selected: device.value.tags.includes(item.name),
       };
     });
+    initialTags = tagList.value;
   } catch (error) {
     console.error(error);
   }
@@ -94,11 +96,12 @@ async function fetchTags() {
 
 async function onUpdateTagsSubmit() {
   const tagNames = seletedTagNames.value;
+
   try {
-    await update_tags(device.value.id, tagNames);
+    const {} = await update_tags(device.value.id, tagNames);
     device.value.tags = tagNames;
   } catch (error) {
-    console.error(error);
+    tagList.value = initialTags;
   }
 }
 
