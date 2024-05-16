@@ -5,6 +5,14 @@
         <CardTitle class="mb-1">Tags</CardTitle>
         <CardDescription>Manage your tags</CardDescription>
       </div>
+      <TagCreateDialog
+        v-model:showDialog="showCreateDialog"
+        @submitted="
+          () => {
+            fetchTags();
+          }
+        "
+      />
     </CardHeader>
     <CardContent>
       <ScrollArea class="w-full whitespace-nowrap">
@@ -72,6 +80,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import TagCreateDialog from "./componnents/TagCreateDialog.vue";
 
 import { ref, onMounted } from "vue";
 import { useToast } from "@/components/ui/toast/use-toast";
@@ -80,6 +89,8 @@ import { getTags, deleteTag } from "@/api/tag";
 import { Tag } from "@/types/tag";
 
 const { toast } = useToast();
+
+const showCreateDialog = ref(false);
 const tagList = ref<Tag[]>([]);
 
 async function fetchTags() {
