@@ -91,7 +91,11 @@ const props = defineProps<{
 }>();
 const pageSize = defineModel("pageSize", {
   type: Number,
-  default: 10,
+  required: true,
+});
+const page = defineModel("page", {
+  type: Number,
+  required: true,
 });
 
 const table = useVueTable({
@@ -103,6 +107,11 @@ const table = useVueTable({
   },
   getCoreRowModel: getCoreRowModel(),
   getPaginationRowModel: getPaginationRowModel(),
+  initialState: {
+    pagination: {
+      pageSize: pageSize.value,
+    },
+  },
 });
 
 watch(pageSize, (newPageSize) => {

@@ -36,69 +36,51 @@
             :columns="columns"
             :data="devices"
             v-model:page-size="pageSize"
+            v-model:page="page"
           />
           <ScrollBar orientation="vertical" />
         </ScrollArea>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
     </CardContent>
-    <CardFooter class="flex flex-1 items-end gap-4 justify-end space-x-2 mr-4">
-      <div class="text-sm text-muted-foreground flex items-center gap-1">
-        Items per page:
-        <Select
-          :model-value="pageSizeString"
-          @update:model-value="pageSizeString = $event"
+    <CardFooter class="flex flex-1 items-end justify-end mr-4">
+      <div class="flex space-x-6">
+        <div class="text-sm text-muted-foreground flex items-center gap-1">
+          Items per page:
+          <Select
+            :model-value="pageSizeString"
+            @update:model-value="pageSizeString = $event"
+          >
+            <SelectTrigger class="w-[70px]">
+              <SelectValue :placeholder="pageSizeString" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="20">20</SelectItem>
+                <SelectItem value="30">30</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <div
+          class="flex w-[100px] items-center justify-center text-sm font-medium"
         >
-          <SelectTrigger class="w-[70px]">
-            <SelectValue :placeholder="pageSizeString" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="20">20</SelectItem>
-              <SelectItem value="30">30</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+          Page {{ page }} of
+          {{ pageCount }}
+        </div>
+        <Pagination :total="totalCount">
+          <PaginationList class="flex items-center gap-1">
+            <PaginationFirst :disabled="isFirstPage" @click="currentPage = 1" />
+            <PaginationPrev :disabled="isFirstPage" @click="prev" />
+            <PaginationNext :disabled="isLastPage" @click="next" />
+            <PaginationLast
+              :disabled="isLastPage"
+              @click="currentPage = currentPageSize"
+            />
+          </PaginationList>
+        </Pagination>
       </div>
-      <Pagination
-        v-slot="{ page }"
-        :total="totalCount"
-        :sibling-count="1"
-        :default-page="1"
-      >
-        <PaginationList v-slot="{ items }" class="flex items-center gap-1">
-          <PaginationFirst :disabled="isFirstPage" @click="currentPage = 1" />
-          <PaginationPrev :disabled="isFirstPage" @click="prev" />
-          <!-- <template v-for="(item, index) in items">
-            <PaginationListItem
-              v-if="item.type === 'page'"
-              :key="index"
-              :value="item.value"
-              as-child
-            >
-              <Button
-                class="w-9 h-9 p-0"
-                :variant="item.value === page ? 'default' : 'outline'"
-                @click="
-                  () => {
-                    if (item.value !== currentPage) currentPage = item.value;
-                  }
-                "
-              >
-                {{ item.value }}
-              </Button>
-            </PaginationListItem>
-            <PaginationEllipsis v-else :key="item.type" :index="index" />
-          </template> -->
-
-          <PaginationNext :disabled="isLastPage" @click="next" />
-          <PaginationLast
-            :disabled="isLastPage"
-            @click="currentPage = currentPageSize"
-          />
-        </PaginationList>
-      </Pagination>
     </CardFooter>
   </Card>
 </template>
@@ -134,6 +116,7 @@ import {
 import DialogCreateForm from "./components/DeviceCreateForm/index.vue";
 
 import { ref, computed, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { useOffsetPagination } from "@vueuse/core";
 import useDeviceType from "@/hooks/useDeviceType";
 
@@ -142,6 +125,9 @@ import { Device } from "@/types/device";
 import DeviceTable from "./components/DeviceTable/index.vue";
 import { columns } from "./components/DeviceTable/column";
 
+const router = useRouter();
+const route = useRoute();
+
 const { getDeviceType } = useDeviceType();
 
 const showCreateDialog = ref<boolean>(false);
@@ -149,8 +135,23 @@ const showCreateDialog = ref<boolean>(false);
 const tableLoading = ref<boolean>(false);
 const devices = ref<Device[]>([]);
 const totalCount = ref<number>(0);
-const page = ref<number>(1);
-const pageSize = ref<number>(10);
+const pageSize = computed({
+  get() {
+    return route.query.pageSize ? parseInt(route.query.pageSize as string) : 10;
+  },
+  set(value) {
+    router.replace({ query: { ...route.query, pageSize: value } });
+  },
+});
+const page = computed({
+  get() {
+    return route.query.page ? parseInt(route.query.page as string) : 1;
+  },
+  set(value) {
+    router.replace({ query: { ...route.query, page: value } });
+  },
+});
+
 const pageSizeString = computed({
   get: () => pageSize.value.toString(),
   set: (value) => {
@@ -165,6 +166,7 @@ async function fetchDevices({
   currentPage: number;
   currentPageSize: number;
 }) {
+  console.log(page.value, pageSize.value);
   tableLoading.value = true;
   try {
     const { data } = await getDevices({
@@ -182,7 +184,6 @@ async function fetchDevices({
       createdAt: item.created_at,
     }));
   } catch (error) {
-    console.error(error);
   } finally {
     tableLoading.value = false;
   }
@@ -198,7 +199,7 @@ function onRefresh() {
 const {
   currentPage,
   currentPageSize,
-  // pageCount,
+  pageCount,
   isFirstPage,
   isLastPage,
   prev,
@@ -209,7 +210,6 @@ const {
   pageSize: pageSize,
   onPageChange: fetchDevices,
   onPageSizeChange: fetchDevices,
-  // onPageCountChange: fetchDevices,
 });
 
 onMounted(async () => {

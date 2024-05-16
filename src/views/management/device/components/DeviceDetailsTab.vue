@@ -23,8 +23,10 @@
         </p>
       </div>
       <div>
-        <span class="text-sm font-medium">Location</span>
-        <p class="text-sm text-gray-500 dark:text-gray-400">Vietnam</p>
+        <span class="text-sm font-medium">Device type</span>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          {{ device.type }}
+        </p>
       </div>
       <div>
         <span class="text-sm font-medium">Connected/Disconnected at</span>

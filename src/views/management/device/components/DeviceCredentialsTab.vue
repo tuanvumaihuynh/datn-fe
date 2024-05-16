@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[50vw]">
+  <div class="max-w-[524px] pt-4">
     <div>
       <h3 class="text-lg font-medium">MQTT Credentials (MQTT Basic)</h3>
       <p class="text-sm text-muted-foreground">

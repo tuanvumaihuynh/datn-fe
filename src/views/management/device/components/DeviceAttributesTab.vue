@@ -9,7 +9,7 @@
     />
   </div>
   <div v-else class="flex flex-col gap-2">
-    <ScrollArea class="h-[64vh] w-full relative">
+    <ScrollArea class="h-[60vh] w-full relative">
       <Table>
         <TableHeader class="sticky top-0 bg-background z-50">
           <TableRow>
