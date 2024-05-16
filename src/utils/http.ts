@@ -61,6 +61,7 @@ axios.interceptors.response.use(
       }
       if (status === 401) {
         toLogin();
+        return Promise.reject(error);
       }
       if (status === 403) {
         const { toast } = useToast();
@@ -70,6 +71,7 @@ axios.interceptors.response.use(
           variant: "destructive",
         });
       }
+      return Promise.reject(error);
     }
   }
 );
