@@ -37,6 +37,9 @@ export const routes: RouteRecordRaw[] = [
   {
     path: "/gateways",
     component: Layout,
+    meta: {
+      authRequired: true,
+    },
     children: [
       {
         path: "",
@@ -53,6 +56,9 @@ export const routes: RouteRecordRaw[] = [
   {
     path: "/devices",
     component: Layout,
+    meta: {
+      authRequired: true,
+    },
     children: [
       {
         path: "",
@@ -69,6 +75,9 @@ export const routes: RouteRecordRaw[] = [
   {
     path: "/tags",
     component: Layout,
+    meta: {
+      authRequired: true,
+    },
     children: [
       {
         path: "",
