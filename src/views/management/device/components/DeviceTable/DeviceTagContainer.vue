@@ -1,7 +1,7 @@
 <template>
   <div>
     <Badge
-      v-for="tag in device.tags"
+      v-for="tag in device.tags.sort()"
       :key="tag"
       variant="outline"
       class="mr-1 my-0.5"
