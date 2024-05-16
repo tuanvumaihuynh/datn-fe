@@ -92,10 +92,6 @@ const pageSize = defineModel("pageSize", {
   type: Number,
   required: true,
 });
-const page = defineModel("page", {
-  type: Number,
-  required: true,
-});
 
 const table = useVueTable({
   get data() {

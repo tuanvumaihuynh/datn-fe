@@ -36,7 +36,6 @@
             :columns="columns"
             :data="devices"
             v-model:page-size="pageSize"
-            v-model:page="page"
           />
           <ScrollBar orientation="vertical" />
         </ScrollArea>
@@ -115,7 +114,7 @@ import {
 } from "@/components/ui/pagination";
 import DialogCreateForm from "./components/DeviceCreateForm/index.vue";
 
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useOffsetPagination } from "@vueuse/core";
 import useDeviceType from "@/hooks/useDeviceType";
@@ -135,20 +134,21 @@ const showCreateDialog = ref<boolean>(false);
 const tableLoading = ref<boolean>(false);
 const devices = ref<Device[]>([]);
 const totalCount = ref<number>(0);
-const pageSize = computed({
-  get() {
-    return route.query.pageSize ? parseInt(route.query.pageSize as string) : 10;
-  },
-  set(value) {
-    router.replace({ query: { ...route.query, pageSize: value } });
-  },
-});
+
 const page = computed({
   get() {
     return route.query.page ? parseInt(route.query.page as string) : 1;
   },
   set(value) {
     router.replace({ query: { ...route.query, page: value } });
+  },
+});
+const pageSize = computed({
+  get() {
+    return route.query.pageSize ? parseInt(route.query.pageSize as string) : 10;
+  },
+  set(value) {
+    router.replace({ query: { ...route.query, pageSize: value } });
   },
 });
 
@@ -166,7 +166,6 @@ async function fetchDevices({
   currentPage: number;
   currentPageSize: number;
 }) {
-  console.log(page.value, pageSize.value);
   tableLoading.value = true;
   try {
     const { data } = await getDevices({
@@ -217,5 +216,8 @@ onMounted(async () => {
     currentPage: page.value,
     currentPageSize: pageSize.value,
   });
+});
+onBeforeUnmount(() => {
+  router.replace({ query: {} });
 });
 </script>
