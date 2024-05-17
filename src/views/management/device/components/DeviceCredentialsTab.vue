@@ -106,7 +106,6 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -156,7 +155,7 @@ const { handleSubmit, setFieldValue } = useForm({
     password: props.credentials.password,
   },
 });
-const onSubmit = handleSubmit((values) => {
+const onSubmit = handleSubmit((_) => {
   toast({
     title: "Credentials updated",
     description: "Your MQTT credentials have been updated successfully",
