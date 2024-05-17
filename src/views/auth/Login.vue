@@ -54,9 +54,14 @@
 
           <form
             @submit="onSubmit"
-            class="mt-8 flex flex-col min-w-[25vw] gap-6"
+            class="mt-8 flex flex-col min-w-[22vw] gap-6"
           >
-            <h1 class="text-2xl">Sign in</h1>
+            <h1 class="text-2xl font-bold">
+              Sign in <br />
+              <span class="text-gray-500 text-sm font-semibold"
+                >to continue to Project Energy Admin</span
+              >
+            </h1>
             <div class="grid gap-2">
               <Label for="username">Username</Label>
               <Input
