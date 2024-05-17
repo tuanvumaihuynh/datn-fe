@@ -32,11 +32,11 @@ export default (): {
   ];
 
   const managementMenus = [
-    {
-      title: "Gateways",
-      path: "/gateways",
-      icon: Router,
-    },
+    // {
+    //   title: "Gateways",
+    //   path: "/gateways",
+    //   icon: Router,
+    // },
     {
       title: "Devices",
       path: "/devices",

@@ -19,21 +19,21 @@ export const routes: RouteRecordRaw[] = [
     },
     component: () => import("@/views/auth/Login.vue"),
   },
-  {
-    path: "/dashboard",
-    component: Layout,
-    redirect: "/dashboard/overview",
-    meta: {
-      authRequired: true,
-    },
-    children: [
-      {
-        path: "overview",
-        name: "Overview",
-        component: () => import("@/views/dashboard/Overview.vue"),
-      },
-    ],
-  },
+  // {
+  //   path: "/dashboard",
+  //   component: Layout,
+  //   redirect: "/dashboard/overview",
+  //   meta: {
+  //     authRequired: true,
+  //   },
+  //   children: [
+  //     {
+  //       path: "overview",
+  //       name: "Overview",
+  //       component: () => import("@/views/dashboard/Overview.vue"),
+  //     },
+  //   ],
+  // },
   {
     path: "/gateways",
     component: Layout,
@@ -41,11 +41,11 @@ export const routes: RouteRecordRaw[] = [
       authRequired: true,
     },
     children: [
-      {
-        path: "",
-        name: "Gateways",
-        component: () => import("@/views/management/gateway/GatewayList.vue"),
-      },
+      // {
+      //   path: "",
+      //   name: "Gateways",
+      //   component: () => import("@/views/management/gateway/GatewayList.vue"),
+      // },
       {
         path: ":id",
         name: "GatewayDetail",
@@ -108,6 +108,18 @@ export const routes: RouteRecordRaw[] = [
         path: "settings",
         name: "Settings",
         component: () => import("@/views/system/Settings.vue"),
+      },
+    ],
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    component: Layout,
+    meta: {},
+    children: [
+      {
+        path: "",
+        name: "not-found",
+        component: () => import("@/views/NotFound.vue"),
       },
     ],
   },
