@@ -32,11 +32,12 @@
             variant="outline"
             class="h-8 flex gap-2 cursor-default hover:cursor-pointer"
             :class="{ 'bg-primary text-white': item.selected }"
-            @click="item.selected = !item.selected"
+            @click="onTagClick(item)"
           >
             {{ item.name }}
           </Badge>
         </div>
+        <span class="text-sm text-red-500">{{ errorMsg }}</span>
         <SheetFooter>
           <SheetTrigger as-child>
             <Button @click="onUpdateTagsSubmit"> Save changes </Button>
@@ -66,14 +67,22 @@ import { update_tags } from "@/api/device";
 import { TagWithSelected } from "@/types/tag";
 import { Device } from "@/types/device";
 
+const MAX_TAGS = 5;
+const TAG_ERROR_MSG = "You can only select up to 5 tags";
+
 type CustomTag = Pick<TagWithSelected, "selected" | "name">;
 
 const device = defineModel<Device>("device", { required: true });
+
+const errorMsg = ref<string | null>(null);
 
 let initialTags: CustomTag[] = [];
 const tagList = ref<CustomTag[]>([]);
 const seletedTagNames = computed(() =>
   tagList.value.filter((tag) => tag.selected).map((tag) => tag.name)
+);
+const seletedTagCount = computed(
+  () => tagList.value.filter((tag) => tag.selected).length
 );
 
 async function fetchTags() {
@@ -92,6 +101,14 @@ async function fetchTags() {
   } catch (error) {
     console.error(error);
   }
+}
+
+function onTagClick(tag: CustomTag) {
+  if (seletedTagCount.value >= MAX_TAGS && !tag.selected) {
+    errorMsg.value = TAG_ERROR_MSG;
+    return;
+  }
+  tag.selected = !tag.selected;
 }
 
 async function onUpdateTagsSubmit() {

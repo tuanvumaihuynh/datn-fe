@@ -112,10 +112,13 @@
                         variant="outline"
                         class="h-8 flex gap-2 cursor-default hover:cursor-pointer"
                         :class="{ 'bg-primary text-white': item.selected }"
-                        @click="item.selected = !item.selected"
+                        @click="onTagClick(item)"
                       >
                         {{ item.name }}
                       </Badge>
+                      <span class="text-sm text-red-500">{{
+                        tagErrorMsg
+                      }}</span>
                     </div>
                     <SheetFooter>
                       <SheetTrigger as-child>
@@ -263,6 +266,9 @@ import { Device } from "@/types/device";
 import { Metric, Log } from "@/types/telemetry";
 import { TagWithSelected } from "@/types/tag";
 
+const MAX_TAGS = 5;
+const TAG_ERROR_MSG = "You can only select up to 5 tags";
+
 const LATEST_METRIC_POLLING_INTERVAL = 5000;
 const GATEWAY_INFO_POLLING_INTERVAL = 5000;
 const LOG_KEY = "log";
@@ -295,8 +301,12 @@ const latestCpuUsage = computed(() => {
   );
   return metric ? `${metric.value.toFixed(2)}%` : "N/A";
 });
+const tagErrorMsg = ref<string | null>(null);
 const seletedTagNames = computed(() =>
   tagList.value.filter((tag) => tag.selected).map((tag) => tag.name)
+);
+const seletedTagCount = computed(
+  () => tagList.value.filter((tag) => tag.selected).length
 );
 const gatewayId = computed(() => route.params.id as string);
 
@@ -404,6 +414,14 @@ async function fetchTags() {
   } catch (error) {
     console.error(error);
   }
+}
+
+function onTagClick(tag: TagWithSelected) {
+  if (seletedTagCount.value >= MAX_TAGS && !tag.selected) {
+    tagErrorMsg.value = TAG_ERROR_MSG;
+    return;
+  }
+  tag.selected = !tag.selected;
 }
 
 async function onUpdateTagsSubmit() {
