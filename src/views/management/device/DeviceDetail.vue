@@ -1,6 +1,6 @@
 <template>
   <Card
-    v-if="device === undefined"
+    v-if="isLoading"
     class="flex flex-col flex-1 items-center justify-center"
   >
     <LoaderCircle
@@ -8,6 +8,7 @@
       aria-label="Loading..."
     />
   </Card>
+  <DeviceDetailError v-else-if="!isLoading && device === undefined" />
   <Card v-else class="flex flex-col flex-1">
     <Tabs v-model="tabValue" class="flex flex-col flex-1">
       <CardHeader class="bg-muted/50 pb-1">
@@ -39,13 +40,13 @@
                     }}
                   </div>
                 </CardDescription>
-                <DeviceTagContainer v-model:device="device" />
+                <DeviceTagContainer v-model:device="device!" />
               </div>
             </div>
 
             <div class="ml-auto flex items-center gap-4">
               <GatewayModeSwitch
-                v-if="device.type === 'Gateway'"
+                v-if="device?.type === 'Gateway'"
                 :deviceId="device.id"
                 :initial-gateway-mode="false"
               />
@@ -74,7 +75,10 @@
             <TabsTrigger value="details">Details</TabsTrigger>
             <TabsTrigger value="attributes">Attributes</TabsTrigger>
             <TabsTrigger value="metric">Latest metric</TabsTrigger>
-            <TabsTrigger v-if="device.type !== 'SubDevice'" value="credentials">
+            <TabsTrigger
+              v-if="device?.type !== 'SubDevice'"
+              value="credentials"
+            >
               Credentials
             </TabsTrigger>
             <TabsTrigger value="relation">Relation</TabsTrigger>
@@ -102,11 +106,11 @@
           <DeviceMetricTab />
         </TabsContent>
         <TabsContent
-          v-if="device.type !== 'SubDevice'"
+          v-if="device?.type !== 'SubDevice'"
           value="credentials"
           :class="tabValue === 'credentials' ? tabClass : 'hidden'"
         >
-          <DeviceCredentialsTab :credentials="device.credentials!" />
+          <DeviceCredentialsTab :credentials="device?.credentials!" />
         </TabsContent>
         <TabsContent
           value="relation"
@@ -145,6 +149,7 @@ import DeviceAttributesTab from "./components/DeviceAttributesTab.vue";
 import DeviceMetricTab from "./components/DeviceMetricTab.vue";
 import DeviceCredentialsTab from "./components/DeviceCredentialsTab.vue";
 import DeviceRelationTab from "./components/DeviceRelationTab.vue";
+import DeviceDetailError from "./components/DeviceDetailError.vue";
 import GatewayModeSwitch from "@/components/GatewayModeSwitch.vue";
 
 import { ref, computed, onMounted } from "vue";
@@ -174,6 +179,8 @@ const { syncPolling } = useSyncPolling();
 const { copyToClipboard } = useClipboard();
 const { getDeviceType } = useDeviceType();
 
+const isLoading = ref(false);
+const isError = ref(false);
 const device = ref<Device>();
 const deviceId = computed(() => route.params.id as string);
 
@@ -197,7 +204,7 @@ async function fetchDevice() {
       createdAt: data.created_at,
     };
   } catch (error) {
-    console.error(error);
+    isError.value = true;
   }
 }
 
@@ -213,9 +220,11 @@ async function getDeviceState() {
 }
 
 onMounted(async () => {
+  isLoading.value = true;
   await fetchDevice();
   if (device.value) {
     syncPolling(getDeviceState, DEVICE_STATE_POLLING_INTERVAL);
   }
+  isLoading.value = false;
 });
 </script>
