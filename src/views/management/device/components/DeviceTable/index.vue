@@ -64,13 +64,15 @@
 
 <script setup lang="ts" generic="TData, TValue">
 import { LoaderCircle } from "lucide-vue-next";
-import type { ColumnDef } from "@tanstack/vue-table";
+import type { ColumnDef, SortingState } from "@tanstack/vue-table";
 import {
   FlexRender,
   getCoreRowModel,
   getPaginationRowModel,
   useVueTable,
+  getSortedRowModel,
 } from "@tanstack/vue-table";
+import { valueUpdater } from "@/lib/utils";
 
 import {
   Table,
@@ -81,7 +83,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { watch } from "vue";
+import { ref, watch } from "vue";
 
 const props = defineProps<{
   columns: ColumnDef<TData, TValue>[];
@@ -93,6 +95,8 @@ const pageSize = defineModel("pageSize", {
   required: true,
 });
 
+const sorting = ref<SortingState>([]);
+
 const table = useVueTable({
   get data() {
     return props.data;
@@ -102,6 +106,13 @@ const table = useVueTable({
   },
   getCoreRowModel: getCoreRowModel(),
   getPaginationRowModel: getPaginationRowModel(),
+  getSortedRowModel: getSortedRowModel(),
+  onSortingChange: (updaterOrValue) => valueUpdater(updaterOrValue, sorting),
+  state: {
+    get sorting() {
+      return sorting.value;
+    },
+  },
   initialState: {
     pagination: {
       pageSize: pageSize.value,

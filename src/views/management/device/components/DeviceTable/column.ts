@@ -1,16 +1,39 @@
-import { h } from "vue";
-import { Device } from "@/types/device";
-import { ColumnDef } from "@tanstack/vue-table";
-import { useDateFormat } from "@vueuse/core";
+import { ChevronsUpDown, ArrowUp, ArrowDown } from "lucide-vue-next";
+import Button from "@/components/ui/button/Button.vue";
 import DropdownAction from "./DeviceTableDropdown.vue";
 import DeviceTagContainer from "./DeviceTagContainer.vue";
 import DeviceNameBtn from "./DeviceNameBtn.vue";
 import DeviceStatusBadge from "./DeviceStatusBadge.vue";
 
+import { h } from "vue";
+import { Device } from "@/types/device";
+import { ColumnDef } from "@tanstack/vue-table";
+import { useDateFormat } from "@vueuse/core";
+
+function getSortIcon(isSorted: boolean | string) {
+  if (isSorted === "asc") {
+    return h(ArrowUp, { class: "ml-2 h-4 w-4" });
+  } else if (isSorted === "desc") {
+    return h(ArrowDown, { class: "ml-2 h-4 w-4" });
+  }
+  return h(ChevronsUpDown, { class: "ml-2 h-4 w-4" });
+}
+
 export const columns: ColumnDef<Device>[] = [
   {
     accessorKey: "name",
-    header: () => h("div", { class: "text-left" }, "Name"),
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted();
+      const sortIcon = getSortIcon(isSorted);
+      return h(
+        Button,
+        {
+          variant: "ghost",
+          onClick: () => column.toggleSorting(isSorted === "asc"),
+        },
+        () => ["Name", sortIcon]
+      );
+    },
     cell: ({ row }) => {
       const device = row.original;
       return h("div", { class: "relative" }, h(DeviceNameBtn, { device }));
@@ -26,7 +49,19 @@ export const columns: ColumnDef<Device>[] = [
   },
   {
     accessorKey: "connected",
-    header: () => h("div", { class: "text-left" }, "Status"),
+    // header: () => h("div", { class: "text-left" }, "Status"),
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted();
+      const sortIcon = getSortIcon(isSorted);
+      return h(
+        Button,
+        {
+          variant: "ghost",
+          onClick: () => column.toggleSorting(isSorted === "asc"),
+        },
+        () => ["Status", sortIcon]
+      );
+    },
     cell: ({ row }) => {
       const device = row.original;
       return h("div", { class: "relative" }, h(DeviceStatusBadge, { device }));
@@ -34,7 +69,18 @@ export const columns: ColumnDef<Device>[] = [
   },
   {
     accessorKey: "tags",
-    header: () => h("div", { class: "text-left" }, "Tags"),
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted();
+      const sortIcon = getSortIcon(isSorted);
+      return h(
+        Button,
+        {
+          variant: "ghost",
+          onClick: () => column.toggleSorting(isSorted === "asc"),
+        },
+        () => ["Tags", sortIcon]
+      );
+    },
     cell: ({ row }) => {
       const device = row.original;
       return h("div", { class: "relative" }, h(DeviceTagContainer, { device }));
@@ -42,7 +88,18 @@ export const columns: ColumnDef<Device>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: () => h("div", { class: "text-left" }, "Created at"),
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted();
+      const sortIcon = getSortIcon(isSorted);
+      return h(
+        Button,
+        {
+          variant: "ghost",
+          onClick: () => column.toggleSorting(isSorted === "asc"),
+        },
+        () => ["Created at", sortIcon]
+      );
+    },
     cell: ({ row }) => {
       const device = row.original;
       return h(
