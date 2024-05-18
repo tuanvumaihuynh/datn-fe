@@ -59,7 +59,7 @@
             <h1 class="text-2xl font-bold">
               Sign in <br />
               <span class="text-gray-500 text-sm font-semibold"
-                >to continue to Project Energy Admin</span
+                >to continue to ProjectEnergyAdmin</span
               >
             </h1>
             <div class="grid gap-2">
