@@ -130,6 +130,11 @@
             </div>
           </div>
           <div class="ml-auto flex items-center gap-1">
+            <GatewayModeSwitch
+              v-if="gateway"
+              :device-id="gateway?.id"
+              :initial-gateway-mode="true"
+            />
             <DropdownMenu>
               <DropdownMenuTrigger as-child>
                 <Button size="icon" variant="outline" class="h-8 w-8">
@@ -238,6 +243,7 @@ import {
 } from "@/components/ui/sheet";
 import LogTable from "./components/LogTable.vue";
 import Skeleton from "./components/Skeleton.vue";
+import GatewayModeSwitch from "@/components/GatewayModeSwitch.vue";
 
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";

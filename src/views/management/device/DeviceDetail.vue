@@ -42,7 +42,13 @@
                 <DeviceTagContainer v-model:device="device" />
               </div>
             </div>
-            <div class="ml-auto flex items-center gap-1">
+
+            <div class="ml-auto flex items-center gap-4">
+              <GatewayModeSwitch
+                v-if="device.type === 'Gateway'"
+                :deviceId="device.id"
+                :initial-gateway-mode="false"
+              />
               <DropdownMenu>
                 <DropdownMenuTrigger as-child>
                   <Button size="icon" variant="outline" class="h-8 w-8">
@@ -68,9 +74,9 @@
             <TabsTrigger value="details">Details</TabsTrigger>
             <TabsTrigger value="attributes">Attributes</TabsTrigger>
             <TabsTrigger value="metric">Latest metric</TabsTrigger>
-            <TabsTrigger v-if="device.type !== 'SubDevice'" value="credentials"
-              >Credentials</TabsTrigger
-            >
+            <TabsTrigger v-if="device.type !== 'SubDevice'" value="credentials">
+              Credentials
+            </TabsTrigger>
             <TabsTrigger value="relation">Relation</TabsTrigger>
           </TabsList>
         </div>
@@ -139,6 +145,7 @@ import DeviceAttributesTab from "./components/DeviceAttributesTab.vue";
 import DeviceMetricTab from "./components/DeviceMetricTab.vue";
 import DeviceCredentialsTab from "./components/DeviceCredentialsTab.vue";
 import DeviceRelationTab from "./components/DeviceRelationTab.vue";
+import GatewayModeSwitch from "@/components/GatewayModeSwitch.vue";
 
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
