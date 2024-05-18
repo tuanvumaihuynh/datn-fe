@@ -141,7 +141,7 @@ const showPassword = ref(false);
 const validationSchema = toTypedSchema(
   z.object({
     username: z.string().min(1, "Username is required"),
-    password: z.string().min(4, "Too short, must be at least 4 characters"),
+    password: z.string().min(1, "Password is required"),
   })
 );
 
