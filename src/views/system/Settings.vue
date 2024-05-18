@@ -1,27 +1,15 @@
 <template>
-  <Tabs default-value="account">
+  <Tabs default-value="appearance">
     <div class="flex items-center">
       <TabsList>
-        <TabsTrigger value="account">Account</TabsTrigger>
+        <!-- <TabsTrigger value="account">Account</TabsTrigger> -->
         <TabsTrigger value="appearance">Appearance</TabsTrigger>
       </TabsList>
     </div>
-    <TabsContent value="account">
-      <Card>
-        <CardHeader>
-          <CardTitle>Account</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <CardDescription>
-            <p>Account settings</p>
-          </CardDescription>
-          <CardFooter>
-            <button class="btn">Save</button>
-          </CardFooter>
-        </CardContent>
-      </Card>
-    </TabsContent>
-    <TabsContent value="appearance">
+    <!-- <TabsContent value="account">
+      <AccountTab />
+    </TabsContent> -->
+    <TabsContent class="flex flex-1 flex-col w-full" value="appearance">
       <SettingAppearanceForm />
     </TabsContent>
   </Tabs>
@@ -29,13 +17,5 @@
 
 <script setup lang="ts">
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import SettingAppearanceForm from "./components/SettingAppearanceForm.vue";
 </script>
