@@ -57,13 +57,13 @@
       <div>
         <span class="text-sm font-medium">Bytes received</span>
         <p class="text-sm text-gray-500 dark:text-gray-400">
-          {{ connectivity?.bytes_received ?? "N/A" }}
+          {{ connectivity?.bytes_sent ?? "N/A" }}
         </p>
       </div>
       <div>
         <span class="text-sm font-medium">Bytes sent</span>
         <p class="text-sm text-gray-500 dark:text-gray-400">
-          {{ connectivity?.bytes_sent ?? "N/A" }}
+          {{ connectivity?.bytes_received ?? "N/A" }}
         </p>
       </div>
       <div>
