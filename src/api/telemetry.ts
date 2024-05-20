@@ -1,5 +1,14 @@
 import http from "@/utils/http";
 
+export function saveDeviceAttributes(params: {
+  deviceId: string;
+  attributes: { [key: string]: any };
+}) {
+  return http.post("/telemetry/attributes", params.attributes, {
+    params: { device_id: params.deviceId },
+  });
+}
+
 export function getDeviceAttributeKeys(deviceId: string) {
   return http.get("/telemetry/attributes/keys", {
     params: { device_id: deviceId },
