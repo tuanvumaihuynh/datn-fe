@@ -1,12 +1,18 @@
 <template>
   <div class="grid gap-4">
     <div class="grid gap-3">
-      <Label for="name" class="text-left">Name</Label>
+      <Label for="name" class="text-left">
+        Name
+        <span class="text-red-500">*</span>
+      </Label>
       <Input id="name" placeholder="e.g. Demo device" v-model="name" />
       <span class="text-sm text-red-500">{{ nameFieldError }}</span>
     </div>
     <div class="grid gap-3">
-      <Label for="deviceType" class="text-left">Type</Label>
+      <Label for="deviceType" class="text-left">
+        Type
+        <span class="text-red-500">*</span>
+      </Label>
       <Select
         id="deviceType"
         :model-value="deviceType"

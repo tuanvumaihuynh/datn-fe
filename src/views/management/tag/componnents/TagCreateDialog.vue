@@ -21,7 +21,10 @@
           Create a new tag to categorize your devices.
         </DialogDescription>
       </DialogHeader>
-      <Label for="tagName" class="text-left">Tag name</Label>
+      <Label for="tagName" class="text-left">
+        Tag name
+        <span class="text-red-500">*</span>
+      </Label>
       <Input
         id="tagName"
         placeholder="e.g. Device type, Location,..."

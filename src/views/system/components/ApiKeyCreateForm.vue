@@ -23,7 +23,10 @@
       </DialogHeader>
       <div class="grid gap-4 py-4">
         <div class="grid gap-3">
-          <Label for="name" class="text-left">Name</Label>
+          <Label for="name" class="text-left">
+            Name
+            <span class="text-red-500">*</span>
+          </Label>
           <Input id="name" placeholder="e.g. Metric acess" v-model="name" />
           <span class="text-sm text-red-500">{{ errors.name }}</span>
         </div>
@@ -101,9 +104,12 @@ import { useField, useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
 
+import { useToast } from "@/components/ui/toast/use-toast";
 import { createApiKey } from "@/api/apiKey";
 import { Permission } from "@/types/role";
 import { ApiKeyCreateResponse } from "@/types/apiKey";
+
+const { toast } = useToast();
 
 const validationSchema = toTypedSchema(
   z.object({
@@ -165,9 +171,16 @@ const onSubmit = handleSubmit(async (values) => {
     showCreateDialog.value = false;
     resetField("name");
     scopes.value.forEach((item) => (item.selected = false));
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
+    toast({
+      title: error.response.data.message,
+      variant: "destructive",
+    });
   } finally {
+    toast({
+      title: "API Key created",
+      description: "API Key has been created successfully.",
+    });
     isSubmitting.value = false;
   }
 });

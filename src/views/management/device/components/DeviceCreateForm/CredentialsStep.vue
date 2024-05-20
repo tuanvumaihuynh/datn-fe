@@ -2,9 +2,12 @@
   <div class="grid gap-4">
     <Label class="text-left text-lg"> Credentials type: MQTT Basic</Label>
     <div class="grid gap-3">
-      <Label for="username" class="text-left">Username</Label>
+      <Label for="mqttUsername" class="text-left">
+        Username
+        <span class="text-red-500">*</span>
+      </Label>
       <div class="relative items-center">
-        <Input id="username" v-model="username" class="pr-10" />
+        <Input id="mqttUsername" v-model="username" class="pr-10" />
         <span
           v-if="!showUsernameCopy"
           class="absolute end-0 inset-y-0 rounded-lg flex items-center justify-center px-2 hover:bg-gray-100 cursor-pointer"
@@ -27,10 +30,13 @@
       <span class="text-sm text-red-500">{{ usernameFieldError }}</span>
     </div>
     <div class="grid gap-3">
-      <Label for="password" class="text-left">Password</Label>
+      <Label for="mqttPassword" class="text-left">
+        Password
+        <span class="text-red-500">*</span>
+      </Label>
       <div class="relative items-center">
         <Input
-          id="password"
+          id="mqttPassword"
           v-model="password"
           :type="showPassword ? 'text' : 'password'"
         />

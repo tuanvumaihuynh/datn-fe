@@ -5,7 +5,7 @@
     <div
       class="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center"
     >
-      <Rocket class="w-10 h-10 text-muted-foreground" />
+      <CircleX class="w-10 h-10 text-muted-foreground" />
 
       <h3 class="mt-4 text-lg font-semibold">Device not found</h3>
       <p class="mb-4 mt-2 text-sm text-muted-foreground">
