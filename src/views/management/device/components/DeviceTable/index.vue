@@ -37,7 +37,7 @@
           </TableCell>
         </TableRow>
       </template>
-      <template v-else-if="table.getRowModel().rows?.length">
+      <template v-else-if="table.getRowModel().rows?.length && !isError">
         <TableRow
           v-for="row in table.getRowModel().rows"
           :key="row.id"
@@ -89,6 +89,7 @@ const props = defineProps<{
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   isLoading: boolean;
+  isError: boolean;
 }>();
 const pageSize = defineModel("pageSize", {
   type: Number,

@@ -6,6 +6,7 @@
         <CardDescription>Total devices: {{ totalCount }}</CardDescription>
       </div>
       <div class="flex items-center gap-2">
+        <TagFilterPopover v-model:tags="tagList" />
         <DialogCreateForm
           :show-create-dialog="showCreateDialog"
           @submitted="
@@ -33,6 +34,7 @@
         <ScrollArea class="h-[64vh] w-full relative">
           <DeviceTable
             :is-loading="tableLoading"
+            :is-error="tableError"
             :columns="columns"
             :data="devices"
             v-model:page-size="pageSize"
@@ -45,7 +47,7 @@
     <CardFooter class="flex flex-1 items-end justify-end mr-4">
       <div class="flex space-x-6">
         <div class="text-sm text-muted-foreground flex items-center gap-1">
-          Items per page:
+          <span class="sr-only sm:not-sr-only">Items per page:</span>
           <Select
             :model-value="pageSizeString"
             @update:model-value="pageSizeString = $event"
@@ -55,11 +57,12 @@
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="10">10</SelectItem>
-                <SelectItem value="20">20</SelectItem>
-                <SelectItem value="30">30</SelectItem>
-                <SelectItem value="50">50</SelectItem>
-                <SelectItem value="100">100</SelectItem>
+                <SelectItem
+                  v-for="(item, i) in ITEM_PER_PAGES"
+                  :key="i"
+                  :value="item.toString()"
+                  >{{ item }}</SelectItem
+                >
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -115,16 +118,25 @@ import {
   PaginationPrev,
 } from "@/components/ui/pagination";
 import DialogCreateForm from "./components/DeviceCreateForm/index.vue";
+import TagFilterPopover from "./components/TagFilterPopover.vue";
+import DeviceTable from "./components/DeviceTable/index.vue";
+import { columns } from "./components/DeviceTable/column";
 
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useOffsetPagination } from "@vueuse/core";
 import useDeviceType from "@/hooks/useDeviceType";
 
 import { getDevices } from "@/api/device";
 import { Device } from "@/types/device";
-import DeviceTable from "./components/DeviceTable/index.vue";
-import { columns } from "./components/DeviceTable/column";
+import { getTags } from "@/api/tag";
+
+interface TagWithSelected {
+  name: string;
+  selected: boolean;
+}
+
+const ITEM_PER_PAGES = [30, 50, 100];
 
 const router = useRouter();
 const route = useRoute();
@@ -134,8 +146,14 @@ const { getDeviceType } = useDeviceType();
 const showCreateDialog = ref<boolean>(false);
 
 const tableLoading = ref<boolean>(false);
+const tableError = ref<boolean>(false);
 const devices = ref<Device[]>([]);
 const totalCount = ref<number>(0);
+const tagList = ref<TagWithSelected[]>([]);
+
+const selectedTagNames = computed(() => {
+  return tagList.value.filter((tag) => tag.selected).map((tag) => tag.name);
+});
 
 const page = computed({
   get() {
@@ -147,13 +165,15 @@ const page = computed({
 });
 const pageSize = computed({
   get() {
-    return route.query.pageSize ? parseInt(route.query.pageSize as string) : 10;
+    const pageSize = route.query.pageSize;
+    return pageSize && ITEM_PER_PAGES.toString().includes(pageSize as string)
+      ? parseInt(route.query.pageSize as string)
+      : 30;
   },
   set(value) {
     router.replace({ query: { ...route.query, pageSize: value } });
   },
 });
-
 const pageSizeString = computed({
   get: () => pageSize.value.toString(),
   set: (value) => {
@@ -164,16 +184,23 @@ const pageSizeString = computed({
 async function fetchDevices({
   currentPage,
   currentPageSize,
+  tags,
 }: {
   currentPage: number;
   currentPageSize: number;
+  tags?: string[];
 }) {
   tableLoading.value = true;
+  tableError.value = false;
   try {
-    const { data } = await getDevices({
+    const params: any = {
       page: currentPage,
       pageSize: currentPageSize,
-    });
+    };
+    if (tags && tags.length > 0) {
+      params.tags = tags;
+    }
+    const { data } = await getDevices(params);
     totalCount.value = data.total_count;
     devices.value = data.items.map((item: any) => ({
       id: item.id,
@@ -185,9 +212,25 @@ async function fetchDevices({
       createdAt: item.created_at,
     }));
   } catch (error) {
+    tableError.value = true;
   } finally {
     tableLoading.value = false;
   }
+}
+
+async function fetchTags() {
+  try {
+    const { data } = await getTags({
+      page: 1,
+      pageSize: 100,
+    });
+    tagList.value = data.items.map((item: any) => {
+      return {
+        name: item.name,
+        selected: false,
+      };
+    });
+  } catch (error) {}
 }
 
 function onRefresh() {
@@ -214,12 +257,31 @@ const {
 });
 
 onMounted(async () => {
-  await fetchDevices({
-    currentPage: page.value,
-    currentPageSize: pageSize.value,
-  });
+  await Promise.all([
+    fetchDevices({
+      currentPage: page.value,
+      currentPageSize: pageSize.value,
+    }),
+    fetchTags(),
+  ]);
 });
 onBeforeUnmount(() => {
   router.replace({ query: {} });
 });
+
+watch(
+  selectedTagNames,
+  async (newVal, oldVal) => {
+    // Avoid fetching devices on first open tag filter popover
+    if (oldVal.length == newVal.length) {
+      return;
+    }
+    await fetchDevices({
+      currentPage: page.value,
+      currentPageSize: pageSize.value,
+      tags: newVal,
+    });
+  },
+  { deep: true }
+);
 </script>
