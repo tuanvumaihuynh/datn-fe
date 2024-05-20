@@ -8,11 +8,11 @@
       >
         <Filter class="h-3.5 w-3.5" />
         <span class="sr-only sm:not-sr-only">Tag filter</span>
-        <div>
+        <div v-if="selectedTagLength && selectedTagLength > 0">
           <span
             class="absolute -top-2 -right-3 -mt-1 -mr-1 inline-flex items-center justify-center rounded-full bg-primary px-2.5 py-0.5 text-background text-xs"
           >
-            {{ tags?.filter((tag) => tag.selected).length }}
+            {{ selectedTagLength }}
           </span>
         </div>
       </Button>
@@ -21,9 +21,9 @@
       <ScrollArea class="h-72">
         <div>
           <h4
-            class="sticky top-0 bg-background z-50 mb-4 text-sm font-medium leading-none"
+            class="sticky top-0 bg-background z-50 pb-3 text-sm font-medium leading-none"
           >
-            Total tag {{ tags?.length }}
+            Total tags: {{ tags?.length }}
           </h4>
           <Separator />
           <div
@@ -65,10 +65,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+import { computed } from "vue";
+
 interface TagWithSelected {
   name: string;
   selected: boolean;
 }
 
 const tags = defineModel<TagWithSelected[]>("tags");
+const selectedTagLength = computed(
+  () => tags.value?.filter((tag) => tag.selected).length
+);
 </script>
