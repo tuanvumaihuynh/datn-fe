@@ -13,9 +13,10 @@
       <Table>
         <TableHeader class="sticky top-0 bg-background z-50">
           <TableRow>
-            <TableHead class="w-[15vw]">Last Update</TableHead>
-            <TableHead class="w-[20vw]">Key</TableHead>
+            <TableHead class="w-[12vw]">Last Update</TableHead>
+            <TableHead class="w-[10vw]">Key</TableHead>
             <TableHead>Value</TableHead>
+            <TableHead class="w-[3vw]"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -24,6 +25,12 @@
               <TableCell>{{ attribute.lastUpdate }}</TableCell>
               <TableCell>{{ attribute.key }}</TableCell>
               <TableCell>{{ attribute.value }}</TableCell>
+              <TableCell>
+                <Pencil
+                  class="w-4 h-4 cursor-pointer hover:text-primary"
+                  @click="onEditAttribute(attribute)"
+                />
+              </TableCell>
             </TableRow>
           </template>
           <template v-else>
@@ -37,10 +44,16 @@
       </Table>
     </ScrollArea>
   </div>
+  <DeviceAttributeEditDialog
+    v-if="selectedAttribute"
+    v-model:show-edit-dialog="showEditDialog"
+    :attribute="selectedAttribute!"
+    @submitted="fetchDeviceAttributes"
+  />
 </template>
 
 <script setup lang="ts">
-import { LoaderCircle } from "lucide-vue-next";
+import { LoaderCircle, Pencil } from "lucide-vue-next";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
@@ -50,6 +63,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import DeviceAttributeEditDialog from "./DeviceAttributeEditDialog.vue";
 
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
@@ -60,12 +74,15 @@ import { Attribute } from "@/types/telemetry";
 
 const ATTRIBUTES_POLLING_INTERVAL = 2000;
 
-const route = useRoute();
 const { syncPolling } = useSyncPolling();
+
+const route = useRoute();
+
 const isLoading = ref(true);
 const deviceId = computed(() => route.params.id as string);
-
 const attributes = ref<Attribute[]>([]);
+const showEditDialog = ref(false);
+const selectedAttribute = ref<Attribute | null>(null);
 
 async function fetchDeviceAttributes() {
   try {
@@ -86,6 +103,11 @@ async function fetchDeviceAttributes() {
     console.error(error);
   } finally {
   }
+}
+
+function onEditAttribute(attribute: Attribute) {
+  selectedAttribute.value = attribute;
+  showEditDialog.value = true;
 }
 
 onMounted(async () => {
