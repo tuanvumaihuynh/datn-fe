@@ -153,7 +153,7 @@ import DeviceDetailError from "./components/DeviceDetailError.vue";
 import GatewayModeSwitch from "@/components/GatewayModeSwitch.vue";
 
 import { ref, computed, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useDateFormat } from "@vueuse/core";
 import useClipboard from "@/hooks/useClipboard";
 import useSyncPolling from "@/hooks/useSyncPolling";
@@ -163,17 +163,32 @@ import { Device } from "@/types/device";
 
 const DEVICE_STATE_POLLING_INTERVAL = 2000;
 
-type TabValue =
-  | "details"
-  | "attributes"
-  | "metric"
-  | "credentials"
-  | "relation";
+const tabValues = [
+  "details",
+  "attributes",
+  "metric",
+  "credentials",
+  "relation",
+] as const;
+type TabValue = (typeof tabValues)[number];
 const tabClass = "flex flex-1 flex-col";
 
-const tabValue = ref<TabValue>("details");
-
+const router = useRouter();
 const route = useRoute();
+
+// const tabValue = ref<TabValue>("details");
+const tabValue = computed({
+  get() {
+    const tab = route.query.tab;
+    if (!(tab && tabValues.includes(tab))) {
+      return "details";
+    }
+    return tab;
+  },
+  set(value) {
+    router.replace({ query: { ...route.query, tab: value } });
+  },
+});
 
 const { syncPolling } = useSyncPolling();
 const { copyToClipboard } = useClipboard();

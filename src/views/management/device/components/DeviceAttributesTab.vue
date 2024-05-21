@@ -24,7 +24,11 @@
             <TableRow v-for="attribute in attributes" :key="attribute.key">
               <TableCell>{{ attribute.lastUpdate }}</TableCell>
               <TableCell>{{ attribute.key }}</TableCell>
-              <TableCell>{{ attribute.value }}</TableCell>
+              <TableCell>
+                <span class="line-clamp-6">
+                  {{ attribute.value }}
+                </span>
+              </TableCell>
               <TableCell>
                 <Pencil
                   class="w-4 h-4 cursor-pointer hover:text-primary"
