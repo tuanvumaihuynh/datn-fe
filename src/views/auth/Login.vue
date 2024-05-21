@@ -167,6 +167,10 @@ const onSubmit = handleSubmit(async (values) => {
       variant: "destructive",
     });
   } finally {
+    toast({
+      title: "Welcome back",
+      description: "You have successfully logged in",
+    });
     isLoading.value = false;
   }
 });
