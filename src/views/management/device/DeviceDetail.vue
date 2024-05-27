@@ -181,6 +181,7 @@ const tabValue = computed({
   get() {
     const tab = route.query.tab;
     if (!(tab && tabValues.includes(tab))) {
+      router.replace({ query: { ...route.query, tab: "details" } });
       return "details";
     }
     return tab;
