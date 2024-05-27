@@ -151,14 +151,13 @@ async function fetchPermissions() {
 async function toggleEnabled(apiKey: ApiKey, enabled: boolean) {
   apiKey.enabled = enabled;
   try {
-    const {} = await updateApiKey({
+    const { data } = await updateApiKey({
       ...apiKey,
     });
     toast({
       title: `${enabled ? "Enabled" : "Disabled"} successfully`,
     });
   } catch (error) {
-    console.error(error);
     apiKey.enabled = !apiKey.enabled;
   }
 }

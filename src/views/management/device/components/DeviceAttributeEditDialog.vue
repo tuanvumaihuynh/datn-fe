@@ -230,11 +230,6 @@ function validate(): boolean {
   return true;
 }
 
-function resetForm() {
-  attributeValue.value = props.attribute.value;
-  selectedDataType.value = attributeDataType.value;
-  errorMessage.value = null;
-}
 function onDataTypeChanged(dataType: DataType) {
   errorMessage.value = null;
   if (dataType === "Boolean") {
@@ -261,24 +256,28 @@ async function onSubmit() {
     });
     emits("submitted");
     showEditDialog.value = false;
+    toast({
+      title: "Attribute updated",
+      description: "The attribute has been updated successfully",
+    });
   } catch (error: any) {
     toast({
       title: error.response.data.message,
       variant: "destructive",
     });
   } finally {
-    toast({
-      title: "Attribute updated",
-      description: "The attribute has been updated successfully",
-    });
     isLoading.value = false;
   }
 }
 
 watch(
   showEditDialog,
-  () => {
-    resetForm();
+  (newVal) => {
+    if (!newVal) {
+      attributeValue.value = props.attribute.value;
+    }
+    selectedDataType.value = attributeDataType.value;
+    errorMessage.value = null;
   },
   { immediate: true }
 );

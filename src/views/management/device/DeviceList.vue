@@ -180,6 +180,19 @@ const pageSizeString = computed({
     pageSize.value = parseInt(value);
   },
 });
+const tagListX = computed({
+  get() {
+    const tags = route.query.tags;
+    if (tags) {
+      return tags.toString().split(",");
+    }
+    return [];
+  },
+  set(value) {
+    const newTags = value.join(",");
+    router.replace({ query: { ...route.query, tags: newTags } });
+  },
+});
 
 async function fetchDevices({
   currentPage,

@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-white">
+  <section class="bg-background">
     <div class="lg:grid lg:min-h-screen lg:grid-cols-12">
       <section
         class="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6"
@@ -160,6 +160,10 @@ const onSubmit = handleSubmit(async (values) => {
     router.replace({
       path: (route.query.to ?? "/devices").toString(),
     });
+    toast({
+      title: "Welcome back",
+      description: "You have successfully logged in",
+    });
   } catch (error: any) {
     toast({
       title: "Failed to login",
@@ -167,10 +171,6 @@ const onSubmit = handleSubmit(async (values) => {
       variant: "destructive",
     });
   } finally {
-    toast({
-      title: "Welcome back",
-      description: "You have successfully logged in",
-    });
     isLoading.value = false;
   }
 });

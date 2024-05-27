@@ -167,6 +167,10 @@ const onSubmit = handleSubmit(async (values) => {
       createdAt: data.created_at,
     };
     showResultDialog.value = true;
+    toast({
+      title: "API Key created",
+      description: "API Key has been created successfully.",
+    });
     emits("submitted");
     showCreateDialog.value = false;
     resetField("name");
@@ -177,10 +181,6 @@ const onSubmit = handleSubmit(async (values) => {
       variant: "destructive",
     });
   } finally {
-    toast({
-      title: "API Key created",
-      description: "API Key has been created successfully.",
-    });
     isSubmitting.value = false;
   }
 });

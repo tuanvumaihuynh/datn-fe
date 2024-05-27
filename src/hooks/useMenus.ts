@@ -68,10 +68,10 @@ export default (): {
   ];
 
   const sections = [
-    // {
-    //   sectionName: "Dashboard",
-    //   menus: dashboardMenus,
-    // },
+    {
+      sectionName: "Dashboard",
+      menus: dashboardMenus,
+    },
     {
       sectionName: "Management",
       menus: managementMenus,

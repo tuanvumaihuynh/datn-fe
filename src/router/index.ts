@@ -6,7 +6,7 @@ const Layout = () => import("@/layouts/MainLayout.vue");
 export const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    redirect: "/devices",
+    redirect: "/dashboard",
     meta: {
       authRequired: true,
     },
@@ -19,21 +19,21 @@ export const routes: RouteRecordRaw[] = [
     },
     component: () => import("@/views/auth/Login.vue"),
   },
-  // {
-  //   path: "/dashboard",
-  //   component: Layout,
-  //   redirect: "/dashboard/overview",
-  //   meta: {
-  //     authRequired: true,
-  //   },
-  //   children: [
-  //     {
-  //       path: "overview",
-  //       name: "Overview",
-  //       component: () => import("@/views/dashboard/Overview.vue"),
-  //     },
-  //   ],
-  // },
+  {
+    path: "/dashboard",
+    component: Layout,
+    redirect: "/dashboard/overview",
+    meta: {
+      authRequired: true,
+    },
+    children: [
+      {
+        path: "overview",
+        name: "Overview",
+        component: () => import("@/views/dashboard/Overview.vue"),
+      },
+    ],
+  },
   {
     path: "/gateways",
     component: Layout,
