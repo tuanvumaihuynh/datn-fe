@@ -17,7 +17,7 @@
       <ScrollArea class="w-full whitespace-nowrap">
         <ScrollArea class="h-[64vh] w-full relative">
           <Table>
-            <TableHeader>
+            <TableHeader class="sticky top-0 bg-background z-50">
               <TableRow>
                 <TableHead class="w-[100px]">Name</TableHead>
                 <TableHead>Prefix</TableHead>
