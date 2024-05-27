@@ -54,13 +54,6 @@
           :categories="['y']"
           :show-legend="false"
           :colors="chartColorList.sent"
-          :x-formatter="
-            (tick, _) => {
-              return typeof tick === 'number'
-                ? `${_formatTime(tick, 'MM/DD')} ${_formatTime(tick, 'HH:mm')}`
-                : '';
-            }
-          "
         />
       </CardContent>
     </Card>
