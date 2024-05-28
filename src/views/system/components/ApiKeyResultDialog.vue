@@ -22,7 +22,12 @@
           <Input id="apiKey" read-only :model-value="apiKey?.token" disabled>
           </Input>
         </div>
-        <Button type="submit" size="sm" class="px-3">
+        <Button
+          type="submit"
+          size="sm"
+          class="px-3"
+          @click="copyToClipboard(apiKey?.token ?? '')"
+        >
           <span class="sr-only">Copy</span>
           <CopyIcon class="w-4 h-4" />
         </Button>
@@ -51,7 +56,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import useClipboard from "@/hooks/useClipboard";
 import { ApiKeyCreateResponse } from "@/types/apiKey";
+
+const { copyToClipboard } = useClipboard();
 
 defineProps<{
   apiKey?: ApiKeyCreateResponse;
