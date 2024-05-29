@@ -2,8 +2,8 @@
   <Card class="flex flex-col flex-1">
     <CardHeader class="flex flex-row justify-between px-7">
       <div>
-        <CardTitle class="mb-1">Users</CardTitle>
-        <CardDescription>Manage users in organizations</CardDescription>
+        <CardTitle class="mb-1">Roles</CardTitle>
+        <CardDescription>Manage roles in organizations</CardDescription>
       </div>
       <div class="flex items-center gap-2">
         <Button variant="outline" size="sm" class="h-7 gap-1 rounded-md px-3">
