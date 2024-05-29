@@ -179,7 +179,7 @@ const route = useRoute();
 // const tabValue = ref<TabValue>("details");
 const tabValue = computed({
   get() {
-    const tab = route.query.tab;
+    const tab = route.query.tab as TabValue;
     if (!(tab && tabValues.includes(tab))) {
       router.replace({ query: { ...route.query, tab: "details" } });
       return "details";
