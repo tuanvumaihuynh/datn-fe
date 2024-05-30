@@ -5,7 +5,7 @@
     <nav class="grid items-start px-2 text-sm font-medium lg:px-4">
       <a href="/" class="flex justify-start items-center gap-2 py-5">
         <Logo class="h-8 w-12 object-contain" />
-        <span class="font-bold text-lg">ProjectEnergyAdmin</span>
+        <span class="font-bold text-lg">PE Admin</span>
       </a>
       <template v-for="(section, i) in sections">
         <span

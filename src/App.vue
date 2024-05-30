@@ -14,5 +14,5 @@ const icon = useFavicon();
 const title = useTitle();
 
 icon.value = Logo;
-title.value = "ProjectEnergyAdmin";
+title.value = "Project Energy Admin";
 </script>

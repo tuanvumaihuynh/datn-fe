@@ -19,7 +19,7 @@
           <h2
             class="bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 text-transparent py-1 bg-clip-text mt-6 text-2xl font-bold sm:text-3xl md:text-4xl"
           >
-            Welcome to ProjectEnergyAdmin
+            Welcome to Project Energy Admin
           </h2>
 
           <p class="mt-4 leading-relaxed text-white/90">

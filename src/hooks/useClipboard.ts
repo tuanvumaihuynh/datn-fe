@@ -7,7 +7,7 @@ export default (): {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast({
-      title: "Copied to clipboard",
+      title: "Copied to the clipboard",
     });
   };
   return {
