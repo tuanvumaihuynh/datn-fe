@@ -46,5 +46,6 @@ export function getDeviceConnectivity(id: string) {
 }
 
 export function isDeviceConnected(id: string) {
-  return http.get(`/devices/${id}/connected`);
+  // @ts-ignore
+  return http.get(`/devices/${id}/connected`, { doNotShowLoading: true });
 }

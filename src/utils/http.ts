@@ -28,11 +28,14 @@ axios.interceptors.request.use(
 );
 
 axios.interceptors.request.use(async (config) => {
-  const requestStore = useRequestStore();
-  if (!requestStore.requestQueueSize) {
-    NProgress.start();
+  // @ts-ignore
+  if (!config.doNotShowLoading) {
+    const requestStore = useRequestStore();
+    if (!requestStore.requestQueueSize) {
+      NProgress.start();
+    }
+    requestStore.incrementRequestQueueSize();
   }
-  requestStore.incrementRequestQueueSize();
   return config;
 });
 
@@ -41,11 +44,17 @@ const isTokenExpired = (status: number, data: any) =>
 
 axios.interceptors.response.use(
   (response) => {
-    setProgressBarDone();
+    // @ts-ignore
+    if (!response.config.doNotShowLoading) {
+      setProgressBarDone();
+    }
     return response;
   },
   async (error) => {
-    setProgressBarDone();
+    // @ts-ignore
+    if (!error.config.doNotShowLoading) {
+      setProgressBarDone();
+    }
     if (error.response) {
       let { data, status } = error.response;
 

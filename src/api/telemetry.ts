@@ -11,7 +11,11 @@ export function saveDeviceAttributes(params: {
 
 export function getDeviceAttributeKeys(deviceId: string) {
   return http.get("/telemetry/attributes/keys", {
-    params: { device_id: deviceId },
+    params: {
+      device_id: deviceId,
+      // @ts-ignore
+      doNotShowLoading: true,
+    },
   });
 }
 
@@ -23,7 +27,12 @@ export function getDeviceAttributes(params: {
     device_id: params.deviceId,
     keys: params.keys.join(","),
   };
-  return http.get("/telemetry/attributes/values", { params: q });
+
+  return http.get("/telemetry/attributes/values", {
+    params: q,
+    // @ts-ignore
+    doNotShowLoading: true,
+  });
 }
 
 export function getDeviceMetricKeys(deviceId: string) {
@@ -35,6 +44,8 @@ export function getDeviceMetricKeys(deviceId: string) {
 export function getLatestDeviceMetrics(deviceId: string) {
   return http.get("/telemetry/metrics/values/latest", {
     params: { device_id: deviceId },
+    // @ts-ignore
+    doNotShowLoading: true,
   });
 }
 
