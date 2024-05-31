@@ -44,7 +44,7 @@
             <h1
               class="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl"
             >
-              Welcome to ProjectEnergyAdmin
+              Welcome to Project Energy Admin
             </h1>
 
             <p class="mt-4 leading-relaxed text-gray-500">
