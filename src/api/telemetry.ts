@@ -13,9 +13,9 @@ export function getDeviceAttributeKeys(deviceId: string) {
   return http.get("/telemetry/attributes/keys", {
     params: {
       device_id: deviceId,
-      // @ts-ignore
-      doNotShowLoading: true,
     },
+    // @ts-ignore
+    doNotShowLoading: true,
   });
 }
 
@@ -78,5 +78,8 @@ export function getDeviceMetrics(
     agg_type: (params as DeviceMetricAggParams).aggType,
     limit: (params as DeviceMetricAggParams).limit,
   };
-  return http.get("/telemetry/metrics/values", { params: q });
+  return http.get("/telemetry/metrics/values", {
+    params: q, // @ts-ignore
+    doNotShowLoading: true,
+  });
 }
