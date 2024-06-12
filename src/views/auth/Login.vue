@@ -158,7 +158,7 @@ const onSubmit = handleSubmit(async (values) => {
     const { data } = await login(values);
     userStore.setAccessToken(data.access_token);
     router.replace({
-      path: (route.query.to ?? "/devices").toString(),
+      path: (route.query.to ?? "/").toString(),
     });
     toast({
       title: "Welcome back",
