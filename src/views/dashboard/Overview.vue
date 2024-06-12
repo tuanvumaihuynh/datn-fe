@@ -40,7 +40,10 @@
         </div>
         <div class="flex items-center justify-between">
           <span class="font-medium">Authorization:</span>
-          <span>ACL-based</span>
+          <div class="flex items-center gap-2">
+            <div class="h-3 w-3 rounded-full bg-red-500" />
+            <span>Not Available</span>
+          </div>
         </div>
         <div class="flex items-center justify-between">
           <span class="font-medium">Persistence:</span>
